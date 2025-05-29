@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:map="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/holo_blue_dark"
+    tools:context=".MapsActivity">
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/map_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        map:layout_constraintBottom_toBottomOf="parent"
+        map:layout_constraintEnd_toEndOf="parent"
+        map:layout_constraintStart_toStartOf="parent"
+        map:layout_constraintTop_toTopOf="parent" />
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/show_tag"
+        android:layout_width="match_parent"
+        android:layout_height="240dp"
+        android:background="@drawable/bg_bottom_shape"
+        android:visibility="gone"
+        map:layout_constraintBottom_toBottomOf="parent"
+        map:layout_constraintEnd_toEndOf="parent"
+        map:layout_constraintStart_toStartOf="parent"
+        tools:visibility="visible">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            map:layout_constraintEnd_toEndOf="parent"
+            map:layout_constraintStart_toStartOf="parent"
+            map:layout_constraintTop_toTopOf="parent"
+            tools:text="test" />
+
+
+        <TextView
+            android:id="@+id/tag_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:textColor="@color/black"
+            map:layout_constraintBottom_toTopOf="@id/calculate_walk_button"
+            map:layout_constraintEnd_toEndOf="parent"
+            map:layout_constraintStart_toStartOf="parent"
+            map:layout_constraintTop_toBottomOf="@id/title"
+            tools:text="1111111" />
+
+        <Button
+            android:id="@+id/calculate_walk_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/bg_button_shape"
+            android:text="步行路线规划"
+            map:layout_constraintBottom_toTopOf="@id/nav_button"
+            map:layout_constraintEnd_toEndOf="parent"
+            map:layout_constraintEnd_toStartOf="@id/calculate_rider_button"
+            map:layout_constraintStart_toStartOf="parent"
+            tools:focusable="true" />
+
+        <Button
+            android:id="@+id/calculate_rider_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_button_shape"
+            android:text="骑行路线规划"
+            map:layout_constraintBottom_toBottomOf="@id/calculate_walk_button"
+            map:layout_constraintEnd_toStartOf="@id/calculate_dirver_button"
+            map:layout_constraintStart_toEndOf="@id/calculate_walk_button"
+            tools:focusable="true" />
+
+        <Button
+            android:id="@+id/calculate_dirver_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_button_shape"
+            android:text="驾驶路线规划"
+            map:layout_constraintBottom_toBottomOf="@id/calculate_walk_button"
+            map:layout_constraintEnd_toEndOf="parent"
+            map:layout_constraintStart_toEndOf="@id/calculate_rider_button"
+            tools:focusable="true" />
+
+        <Button
+            android:id="@+id/nav_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/bg_button_shape"
+            android:text="开始导航"
+            map:layout_constraintBottom_toBottomOf="parent"
+            map:layout_constraintEnd_toStartOf="@id/nav_emual_button"
+            map:layout_constraintStart_toStartOf="parent"
+            tools:focusable="true" />
+
+
+        <Button
+            android:id="@+id/nav_emual_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/bg_button_shape"
+            android:text="模拟导航"
+            map:layout_constraintBottom_toBottomOf="parent"
+            map:layout_constraintEnd_toEndOf="parent"
+            map:layout_constraintStart_toEndOf="@id/nav_button"
+            tools:focusable="true" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/nav_detail_view"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        android:background="@drawable/bg_bottom_shape"
+        map:layout_constraintBottom_toBottomOf="parent"
+        map:layout_constraintEnd_toEndOf="parent"
+        map:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:id="@+id/speed"
+            android:layout_width="0dp"
+            android:textColor="@color/black"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_weight="1"/>
+
+        <ImageView
+            android:layout_width="1dp"
+            android:layout_height="20dp"
+            android:background="#dddd"
+            android:layout_gravity="center_vertical"/>
+
+        <TextView
+            android:id="@+id/distance"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:textColor="@color/black"
+            android:gravity="center"
+            android:layout_weight="1"/>
+
+        <ImageView
+            android:layout_width="1dp"
+            android:layout_height="20dp"
+            android:background="#dddd"
+            android:layout_gravity="center_vertical"/>
+
+        <TextView
+            android:id="@+id/time"
+            android:layout_width="0dp"
+            android:textColor="@color/black"
+            android:gravity="center"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
