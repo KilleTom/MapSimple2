@@ -1,11 +1,16 @@
 package com.killetom.dev.map
 
+import android.Manifest
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
+import androidx.core.content.PermissionChecker.PERMISSION_GRANTED
 import com.amap.api.location.AMapLocation
 import com.amap.api.location.AMapLocationClient
 import com.amap.api.location.AMapLocationClientOption
@@ -21,6 +26,7 @@ import com.killetom.dev.map.data.BaseLocation
 import com.killetom.dev.map.data.NavInfor
 import com.killetom.dev.map.data.TagLatLngData
 import com.killetom.dev.map.databinding.FragmentAmapBinding
+import com.killetom.dev.map.dialog.ConfirmDialog
 import com.killetom.dev.map.vm.InstanceMapActionVM
 
 
@@ -47,13 +53,23 @@ class AMapFragment(private val tagPointVM: InstanceMapActionVM) : IMapFragment()
     private var riderMarker: Marker? = null
     private var personMarker: Marker? = null
 
-    private val carIcon = BitmapDescriptorFactory.fromResource(R.drawable.ic_card)
-    private val bikeIcon = BitmapDescriptorFactory.fromResource(R.drawable.ic_bike)
-    private val personWalkIcon = BitmapDescriptorFactory.fromResource(R.drawable.ic_person_walk)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    private val permissionLauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions: Map<String, Boolean> ->
+        val allGranted = permissions.all { it.value }
+        if (allGranted) {
+            // 所有权限都已授予
+            initLocation()
+        } else {
+            permissions.filter { !it.value }.keys.forEach { permission ->
+                Log.w("${TAG}Permission", "$permission denied")
+            }
+            // 处理被拒绝的权限
+            Toast.makeText(requireContext(),"您拒绝权限，导致App无法运行导航相关功能将退出使用",Toast.LENGTH_SHORT).show()
+            requireActivity().finish()
+        }
+    }
 
+    private fun initAction(){
         navHelperAction.init(requireContext())
         try {
             Log.i(TAG, "onCreate-mapReadychecker")
@@ -61,6 +77,26 @@ class AMapFragment(private val tagPointVM: InstanceMapActionVM) : IMapFragment()
         } catch (e: Exception) {
             e.printStackTrace()
         }
+    }
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val requiredPermissions = arrayOf(
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        )
+
+        initAction()
+
+        // 检查是否已有权限
+        if (requiredPermissions.all { ContextCompat.checkSelfPermission(requireContext(), it) == PERMISSION_GRANTED }) {
+            initLocation()
+        } else {
+            permissionLauncher.launch(requiredPermissions)
+        }
+
 
         navHelperAction.calculateStatusCall = {
 
@@ -120,7 +156,6 @@ class AMapFragment(private val tagPointVM: InstanceMapActionVM) : IMapFragment()
                 )
 
             }
-
 
         navHelperAction.updateActualNavgationRouter = { routes ->
             Log.i("update_router", "update${System.currentTimeMillis()}")
@@ -215,7 +250,6 @@ class AMapFragment(private val tagPointVM: InstanceMapActionVM) : IMapFragment()
                         val option = MarkerOptions()
                             .position(latlng)
                             .icon(BitmapDescriptorFactory.fromView(markerView))
-
                             .anchor(0.5f, 0.5f)
 
 
@@ -231,7 +265,6 @@ class AMapFragment(private val tagPointVM: InstanceMapActionVM) : IMapFragment()
             }
 
         }
-
 
         navHelperAction.navStartCall = {
 //            aMap?.clear()
@@ -311,7 +344,7 @@ class AMapFragment(private val tagPointVM: InstanceMapActionVM) : IMapFragment()
             currentMap.isMyLocationEnabled = true// 是否启动显示定位蓝点,默认是false
 
             aMap = currentMap
-            initLocation()
+
             setCenter(BaseLocation(21.28773, 110.367324))
 //            aMap?.setOn
         }
@@ -490,7 +523,6 @@ class AMapFragment(private val tagPointVM: InstanceMapActionVM) : IMapFragment()
         super.onSaveInstanceState(outState)
         binding?.map?.onSaveInstanceState(outState)
     }
-
 
     override fun mapReadychecker() {
 //        TODO("Not yet implemented")

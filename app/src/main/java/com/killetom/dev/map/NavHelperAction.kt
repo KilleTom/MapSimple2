@@ -22,7 +22,7 @@ class NavHelperAction : AMapNaviListener, ParallelRoadListener {
     private var recordPoints: ArrayList<AMapNaviLocation> = arrayListOf()
     private var navStatus = false
     private var calculateStatus = -1
-    private var navActionType = 0
+    private var navActionType = -1
     var requireLocation: (() -> AMapLocation?)? = null
 
      val navWalkAction = 0

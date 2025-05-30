@@ -1,15 +1,12 @@
 package com.killetom.dev.map
 
 
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.NewInstanceFactory
 import androidx.lifecycle.observe
-import com.amap.api.maps.AMap
 import com.killetom.dev.map.databinding.ActivityMapsBinding
 import com.killetom.dev.map.vm.InstanceMapActionVM
 import kotlin.math.absoluteValue
@@ -35,7 +32,7 @@ class MapsActivity : AppCompatActivity() {
                 NewInstanceFactory()
             )[InstanceMapActionVM::class.java]
 
-        var iMapFragment: IMapFragment = AMapFragment(mapActionVM)
+        val iMapFragment: IMapFragment = AMapFragment(mapActionVM)
 
         supportFragmentManager.beginTransaction().add(binding.mapView.id, iMapFragment).commitNow()
 
@@ -91,7 +88,7 @@ class MapsActivity : AppCompatActivity() {
 
             binding.distance.text = "${totalDistanceString}\n${currentDistanceString}\n$restTripDistanceString"
 
-            var time = info.time
+            val time = info.time
             val hours = time / 3600
             val minutes = (time % 3600) / 60
             val seconds = time % 60
@@ -128,65 +125,6 @@ class MapsActivity : AppCompatActivity() {
                     mapActionVM.navReadyStatus.value = false
                     iMapFragment.navDiverLocation(data.latLng)
                 }
-
-
-//                binding.navButton.setOnClickListener {
-////                    val routeSearch = RouteSearch(this)
-////                    routeSearch.setRouteSearchListener(object : RouteSearch.OnRouteSearchListener {
-////
-////                        override fun onBusRouteSearched(p0: BusRouteResult?, p1: Int) {
-////
-////                        }
-////
-////                        override fun onDriveRouteSearched(p0: DriveRouteResult?, p1: Int) {
-////
-////                        }
-////
-////                        override fun onWalkRouteSearched(result: WalkRouteResult, errorCode: Int) {
-////                            if (errorCode == 1000 && result != null && result.paths != null) {
-////                                if (result.paths.size > 0) {
-////                                    // 获取第一条步行路径
-////                                    val walkPath = result.paths[0]
-////                                    // 绘制路径到地图
-//////                                    drawWalkRoute(walkPath)
-////                                }
-////                            } else {
-////                                Toast.makeText(
-////                                    this@MapsActivity,
-////                                    "路径规划失败：$errorCode",
-////                                    Toast.LENGTH_SHORT
-////                                ).show()
-////                            }
-////                        }
-////
-////                        override fun onRideRouteSearched(p0: RideRouteResult?, p1: Int) {
-//////                            TODO("Not yet implemented")
-////                        }
-////                    })
-////
-////// 设置起终点
-////
-////                    val orginPoint = iMapFragment.getPresionLocation()
-////
-////// 设置起终点
-////                    val fromAndTo = RouteSearch.FromAndTo(
-////                        LatLonPoint(orginPoint.getLat(), orginPoint.getLng()),  // 起点经纬度
-////                        LatLonPoint(data.latLng.getLat(), data.latLng.getLng()) // 终点经纬度
-////                    )
-////// 构建查询对象
-////// 构建查询对象
-////                    val query = RouteSearch.WalkRouteQuery(fromAndTo)
-////                    routeSearch.calculateWalkRouteAsyn(query)
-//
-//
-//
-//                    mapActionVM.locationLatLng.value = iMapFragment.getPresionLocation()
-////                    Log.i("NavFragment","${mapActionVM.locationLatLng.value}")
-////                    mapActionVM.state.value = InstanceMapActionVM.UIState.NAV()
-//
-//                    startActivity(Intent(this,NavSimpleActivity::class.java))
-//
-//                }
 
             } else {
 
